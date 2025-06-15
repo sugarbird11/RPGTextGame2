@@ -112,16 +112,16 @@ public class RPGTextGame {
 
 					if (game_situation == 2) {
 						if (fight_with == 1) {
-							if (Missions.clear_hunting_raccoon())
+							if (myHero.getLevel() >= 1 && Missions.clear_hunting_raccoon())
 								myHero.add_exp(10);
 						} else if (fight_with == 2) {
-							if (Missions.clear_hunting_lynx())
+							if (myHero.getLevel() >= 5 && Missions.clear_hunting_lynx())
 								myHero.add_exp(30);
 						} else if (fight_with == 3) {
-							if (Missions.clear_hunting_dog())
+							if (myHero.getLevel() >= 10 && Missions.clear_hunting_dog())
 								myHero.add_exp(50);
 						} else if (fight_with == 4) {
-							if (Missions.clear_hunting_boar())
+							if (myHero.getLevel() >= 15 && Missions.clear_hunting_boar())
 								myHero.add_exp(70);
 						}
 					}
@@ -144,7 +144,7 @@ public class RPGTextGame {
 					game_situation = 2;
 				else {
 					game_situation = myHero.potion_store(buy);
-					if (game_situation == 2 && Missions.clear_buy_potion()) {
+					if (game_situation == 2 && myHero.getLevel() >= 1 && Missions.clear_buy_potion()) {
 						myHero.add_exp(30);
 					}
 				}
@@ -155,7 +155,7 @@ public class RPGTextGame {
 				System.out.printf("[%s 무기]", professions[numPf - 1]);
 				System.out.println("\n0. 나가기");
 				game_situation = myHero.weapon_store();
-				if (game_situation == 2 && Missions.clear_buy_weapon()) {
+				if (game_situation == 2 && myHero.getLevel() >= 2 && Missions.clear_buy_weapon()) {
 					myHero.add_exp(70);
 				}
 				break;
@@ -165,7 +165,7 @@ public class RPGTextGame {
 				System.out.println("[방어구]");
 				System.out.println("0. 나가기");
 				game_situation = myHero.armor_store();
-				if (game_situation == 2 && Missions.clear_buy_armor()) {
+				if (game_situation == 2 && myHero.getLevel() >= 2 && Missions.clear_buy_armor()) {
 					myHero.add_exp(70);
 				}
 				break;
@@ -175,20 +175,22 @@ public class RPGTextGame {
 				String[] missions = { "너구리 사냥\t| 너구리를 1회 잡으세요.", "살쾡이 사냥\t| 살쾡이를 1회 잡으세요.", "들개 사냥\t| 들개를 1회 잡으세요.",
 						"멧돼지 사냥\t| 멧돼지를 1회 잡으세요.", "포션 구매\t| 포션을 구매하세요.", "무기 구매\t| 무기를 구매하세요.",
 						"방어구 구매\t| 방어구를 구매하세요.", "5레벨 달성\t| 5레벨을 달성하세요.", "10레벨 달성\t| 10레벨을 달성하세요." };
+				int[] missions_level = { 1, 5, 10, 15, 1, 2, 2, 1, 5 };
 				boolean[] bool_missions = { Missions.get_hunting_raccoon(), Missions.get_hunting_lynx(),
 						Missions.get_hunting_dog(), Missions.get_hunting_boar(), Missions.get_buy_potion(),
 						Missions.get_buy_weapon(), Missions.get_buy_armor(), Missions.get_reach_level_5(),
 						Missions.get_reach_level_10() };
 				for (int i = 0; i < missions.length; i++) {
-					System.out.printf("%s\t| %s\n", bool_missions[i] ? "[달성]" : "[미달성]", missions[i]);
+					if (myHero.getLevel() >= missions_level[i])
+						System.out.printf("%s\t| %s\n", bool_missions[i] ? "[달성]" : "[미달성]", missions[i]);
 				}
 				game_situation = 2;
 
 			}
 			myHero.LevelUp();
-			if (myHero.getLevel() == 5 && Missions.clear_reach_level_5()) {
+			if (myHero.getLevel() == 5 && myHero.getLevel() >= 1 && Missions.clear_reach_level_5()) {
 				myHero.add_money(30);
-			} else if (myHero.getLevel() == 10 && Missions.clear_reach_level_10()) {
+			} else if (myHero.getLevel() == 10 && myHero.getLevel() >= 5 && Missions.clear_reach_level_10()) {
 				myHero.add_money(60);
 			}
 			System.out.println("*********************");
